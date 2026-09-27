@@ -549,8 +549,7 @@ TWRP_REQUIRED_MODULES += \
     vndservicemanager.rc \
     plat_service_contexts \
     servicemanager \
-    servicemanager.rc \
-    libboot_control_client
+    servicemanager.rc
 
 ifneq ($(TW_INCLUDE_CRYPTO),)
 TWRP_REQUIRED_MODULES += \
