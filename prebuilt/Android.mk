@@ -439,7 +439,7 @@ LOCAL_MODULE := relink_vendor_hw_binaries
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/
-LOCAL_POST_INSTALL_CMD += $(RELINK) $(TARGET_RECOVERY_ROOT_OUT)/vendor/bin/hw $(RECOVERY_VENDOR_HW_BINARY_FILES)
+LOCAL_POST_INSTALL_CMD += $(RELINK) $(TARGET_RECOVERY_ROOT_OUT)/$(TARGET_COPY_OUT_VENDOR)/bin/hw $(RECOVERY_VENDOR_HW_BINARY_FILES)
 TARGET_VENDOR_BINARY_RELINK_FILES := $(notdir $(RECOVERY_VENDOR_HW_BINARY_FILES))
 LOCAL_REQUIRED_MODULES += $(TARGET_VENDOR_BINARY_RELINK_FILES)
 $(warning vendor_hw: $(LOCAL_POST_INSTALL_CMD))
@@ -454,12 +454,12 @@ LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)
 LOCAL_POST_INSTALL_CMD += \
     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin; ln -sf /system/bin/sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/sh && \
     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/etc/selinux/ && \
-    mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/vendor/etc/selinux/ && \
+    mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/$(TARGET_COPY_OUT_VENDOR)/etc/selinux/ && \
     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/etc/task_profiles/ && \
     cp $(TARGET_OUT_ETC)/selinux/plat_service_contexts $(TARGET_RECOVERY_ROOT_OUT)/system/etc/selinux/plat_service_contexts && \
     cp $(TARGET_OUT_ETC)/selinux/plat_hwservice_contexts $(TARGET_RECOVERY_ROOT_OUT)/system/etc/selinux/plat_hwservice_contexts && \
-    cp $(TARGET_OUT_VENDOR_ETC)/selinux/vndservice_contexts $(TARGET_RECOVERY_ROOT_OUT)/vendor/etc/selinux/vndservice_contexts && \
-    cp $(TARGET_OUT_VENDOR_ETC)/selinux/vendor_hwservice_contexts $(TARGET_RECOVERY_ROOT_OUT)/vendor/etc/selinux/vendor_hwservice_contexts && \
+    cp $(TARGET_OUT_VENDOR_ETC)/selinux/vndservice_contexts $(TARGET_RECOVERY_ROOT_OUT)/$(TARGET_COPY_OUT_VENDOR)/etc/selinux/vndservice_contexts && \
+    cp $(TARGET_OUT_VENDOR_ETC)/selinux/vendor_hwservice_contexts $(TARGET_RECOVERY_ROOT_OUT)/$(TARGET_COPY_OUT_VENDOR)/etc/selinux/vendor_hwservice_contexts && \
     cp $(TARGET_OUT_ETC)/selinux/plat_keystore2_key_contexts $(TARGET_RECOVERY_ROOT_OUT)/system/etc/selinux/plat_keystore2_key_contexts && \
     cp $(TARGET_OUT_ETC)/task_profiles.json $(TARGET_RECOVERY_ROOT_OUT)/system/etc/task_profiles/task_profiles_30.json
     ifeq ($(TARGET_USES_MKE2FS), true)
