@@ -60,6 +60,10 @@ int MtpDevHandle::sendEvent(mtp_event me) {
 }
 
 int MtpDevHandle::start(bool /* ptp */) {
+	// f_mtp admits one opener (mtp_open returns -EBUSY while open_excl is
+	// held), so the descriptor the server was constructed with is closed
+	// before the device is opened again.
+	mFd.reset();
 	mFd.reset(TEMP_FAILURE_RETRY(open(mtp_dev_path, O_RDWR)));
 	if (mFd == -1) return -1;
 	return 0;
