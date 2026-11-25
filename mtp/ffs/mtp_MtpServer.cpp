@@ -74,7 +74,10 @@ void twmtp_MtpServer::start()
 		MTPD("Opening FFS EPO\n");
 		controlFd = open(FFS_MTP_EP0, O_RDWR);
 	} else {
-		controlFd = open(mtp_device, O_WRONLY);
+		/* MtpDevHandle reads and writes through this descriptor and keeps
+		 * it as the session descriptor; f_mtp admits one opener at a time
+		 * (open_excl), so the node is opened O_RDWR once, here. */
+		controlFd = open(mtp_device, O_RDWR);
 	}
 	if (controlFd < 0) {
 		MTPE("could not open MTP driver, errno: %d\n", errno);
