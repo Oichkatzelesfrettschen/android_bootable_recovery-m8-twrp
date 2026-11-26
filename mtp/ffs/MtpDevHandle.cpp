@@ -60,10 +60,18 @@ int MtpDevHandle::sendEvent(mtp_event me) {
 }
 
 int MtpDevHandle::start(bool /* ptp */) {
-	// f_mtp admits one opener (mtp_open returns -EBUSY while open_excl is
-	// held), so the descriptor the server was constructed with is closed
-	// before the device is opened again.
-	mFd.reset();
+	// f_mtp admits one opener (mtp_open takes open_excl and returns -EBUSY
+	// to a second), and vfs_read rejects read() on a write-only descriptor
+	// with -EBADF, so the session descriptor is opened O_RDWR. A held
+	// descriptor with that access mode is the session descriptor: the node
+	// stays owned from construction to the first close(). Any other access
+	// mode is released first, since the reopen below fails with -EBUSY
+	// while it is held.
+	if (mFd != -1) {
+		int flags = fcntl(mFd, F_GETFL);
+		if (flags != -1 && (flags & O_ACCMODE) == O_RDWR) return 0;
+		mFd.reset();
+	}
 	mFd.reset(TEMP_FAILURE_RETRY(open(mtp_dev_path, O_RDWR)));
 	if (mFd == -1) return -1;
 	return 0;
